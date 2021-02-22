@@ -2,7 +2,7 @@
 
 ## m3u8 下载器
 
-一个 m3u8 下载器
+一个 m3u8 下载器  
 使用 Python 编写，支持 AES-128 解密
 
 ### 怎么使用
@@ -18,7 +18,7 @@ run.py https://example.com/index.m3u8
 
 ## m3u8Downloader
 
-An m3u8 Downloader.
+An m3u8 Downloader.  
 Written in Python,Support AES-128 decryption.
 
 ### How to use it

@@ -29,7 +29,7 @@ def aesEncrypt(key, data):
     print(enctext)
     return enctext
 
-def aesDecrypt(key, data):
+def aesDecrypt(key, data, iv):
     '''
 
     :param key: 密钥
@@ -39,7 +39,7 @@ def aesDecrypt(key, data):
     #key = key.encode('utf8')
     #data = base64.b64decode(data)
     #cipher = AES.new(key, AES.MODE_ECB)
-    cipher = AES.new(key,AES.MODE_CBC,key)
+    cipher = AES.new(key,AES.MODE_CBC,iv)
 
     # 去补位
     text_decrypted = unpad(cipher.decrypt(data))

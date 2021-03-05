@@ -1,49 +1,23 @@
 from Crypto.Cipher import AES
 #from Crypto.Util.Padding import pad, unpad
-import base64
-
-
-BLOCK_SIZE = 16  # Bytes
-
-pad = lambda s: s + (BLOCK_SIZE - len(s) % BLOCK_SIZE) * \
-                chr(BLOCK_SIZE - len(s) % BLOCK_SIZE)
-unpad = lambda s: s[:-ord(s[len(s) - 1:])]
-
-
-
-def aesEncrypt(key, data):
-    '''
-    AES的ECB模式加密方法
-    :param key: 密钥
-    :param data:被加密字符串（明文）
-    :return:密文
-    '''
-    key = key.encode('utf8')
-    # 字符串补位
-    data = pad(data)
-    cipher = AES.new(key, AES.MODE_ECB)
-    # 加密后得到的是bytes类型的数据，使用Base64进行编码,返回byte字符串
-    result = cipher.encrypt(data.encode())
-    encodestrs = base64.b64encode(result)
-    enctext = encodestrs.decode('utf8')
-    print(enctext)
-    return enctext
 
 def aesDecrypt(key, data, iv):
     '''
-
     :param key: 密钥
     :param data: 加密后的数据（密文）
+    :param iv: IV
     :return:明文
     '''
-    #key = key.encode('utf8')
-    #data = base64.b64decode(data)
-    #cipher = AES.new(key, AES.MODE_ECB)
     cipher = AES.new(key,AES.MODE_CBC,iv)
 
-    # 去补位
-    text_decrypted = unpad(cipher.decrypt(data))
-    #text_decrypted = cipher.decrypt(data)
-    #text_decrypted = text_decrypted.decode('utf8')
-    #print(text_decrypted)
+    counts=0
+    #补位
+    while len(data) % 16 != 0:
+        data += b"0"
+        counts+=1
+    #解密 
+    text_decrypted = cipher.decrypt(data)
+    #去补位
+    for i in range(counts):
+        text_decrypted -= b"0"
     return text_decrypted

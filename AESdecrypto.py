@@ -12,9 +12,9 @@ def aesDecrypt(key, data, iv):
 
     counts=0
     #补位
-    while len(data) % 16 != 0:
+    counts = len(data) % 16
+    for i in range(counts):
         data += b"0"
-        counts+=1
     #解密 
     text_decrypted = cipher.decrypt(data)
     #去补位

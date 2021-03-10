@@ -39,8 +39,9 @@ run.py -f example.m3u8
 打开CMD，进入m3u8Donwloader所在目录  
 ```
 GUI.py
-```
-  
+```  
+![image](https://user-images.githubusercontent.com/27936579/110605603-3eac8980-81c4-11eb-8f54-e3f8607ef4e5.png)
+
 ---
   
 # English
@@ -84,4 +85,5 @@ run.py -f example.m3u8
 Open the CMD and enter the directory of m3u8dongwloader.  
 ```
 GUI.py
-```
+```  
+![image](https://user-images.githubusercontent.com/27936579/110605603-3eac8980-81c4-11eb-8f54-e3f8607ef4e5.png)

@@ -10,6 +10,18 @@ option = ""
 def progressBarGUI():
     pgb = tk.Tk()
     pgb.title("m3u8Downloader -https://github.com/Leenshady/m3u8Downloader")
+
+    sw = pgb.winfo_screenwidth()
+    sh = pgb.winfo_screenheight()
+    ww = 200
+    wh = 180
+    x = (sw-ww) / 2
+    y = (sh-wh) / 2 - 10
+    pgb.geometry("%dx%d+%d+%d" %(ww,wh,x,y))
+
+    pgb.minsize(ww, wh)
+    pgb.maxsize(ww, wh)
+
     v = tk.StringVar(master=pgb)
     tk.Label(pgb, text='下载进度:', ).place(x=20, y=30)
     progress = tk.Label(pgb, textvariable=v)
@@ -31,19 +43,31 @@ def stopDownload(pgb):
     main()
 
 def masterPlaylistOptGUI(info,protocol,host,url,downloadUrl):
-    root1 = tk.Tk()
-    root1.title("m3u8Downloader -https://github.com/Leenshady/m3u8Downloader")
+    mpog = tk.Tk()
+    mpog.title("m3u8Downloader -https://github.com/Leenshady/m3u8Downloader")
+
+    sw = mpog.winfo_screenwidth()
+    sh = mpog.winfo_screenheight()
+    ww = 700
+    wh = 180
+    x = (sw-ww) / 2
+    y = (sh-wh) / 2 - 10
+    mpog.geometry("%dx%d+%d+%d" %(ww,wh,x,y))
+
+    mpog.minsize(ww, wh)
+    mpog.maxsize(1000, wh)
+
     #这里是个巨坑，master参数一定要填上，不然radio不会绑定到Radiobutton上
-    radio = tk.IntVar(master=root1)
+    radio = tk.IntVar(master=mpog)
     r = []
     for i in range(len(info)):
         m3u8dler.printer.print("###GUI.py p i="+str(i),"i")
-        r.append(tk.Radiobutton(root1, text=info[i], variable=radio, value=i))
+        r.append(tk.Radiobutton(mpog, text=info[i], variable=radio, value=i))
         r[i].pack(side=tk.TOP, expand=tk.YES, fill=tk.Y)
         r[i].select()
-    button = tk.Button(root1,text="下载", command=lambda:m3u8dler.thread_download(protocol,host,url,downloadUrl,radio.get(),root1))
+    button = tk.Button(mpog,text="下载", command=lambda:m3u8dler.thread_download(protocol,host,url,downloadUrl,radio.get(),mpog))
     button.pack(side=tk.TOP, expand=tk.YES, fill=tk.Y)
-    root1.mainloop()
+    mpog.mainloop()
     return
 
 def download(url,root):
@@ -61,8 +85,18 @@ def selectU():
 def main():
     root = tk.Tk()
     root.title("m3u8Downloader -https://github.com/Leenshady/m3u8Downloader")
-    root.minsize(650, 150)
-    root.maxsize(650, 150)  
+    
+    sw = root.winfo_screenwidth()
+    sh = root.winfo_screenheight()
+    ww = 650
+    wh = 150
+    x = (sw-ww) / 2
+    y = (sh-wh) / 2 - 10
+    root.geometry("%dx%d+%d+%d" %(ww,wh,x,y))
+
+    root.minsize(ww, wh)
+    root.maxsize(ww, wh)
+
     radio = tk.IntVar()
 
     R1 = tk.Radiobutton(root, text="文件", variable=radio, value=1, command=selectF)  

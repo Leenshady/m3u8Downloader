@@ -10,9 +10,11 @@ import tkinter as tk
 import _thread
 import tkinter.messagebox as messagebox
 import GUI
+import subprocess
 
 headers = {'user-agent':'User-Agent:Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1'}
-global num
+global progressValue
+progressValue = 0.00
 global printer
 
 #预处理参数
@@ -68,6 +70,7 @@ def m3u8MediaProcessor(url,urlWOVar,content):#链接处理
     #print("!!!"+url)
     #print("!!!"+urlWOVar)
     #print("!!!"+content[0:200])
+    global progressValue
     list2 = content.split("\n")
     f2 = open('file.txt','wb')#file.txt用于辅助合并.ts文件
     isEncrypto = False
@@ -78,6 +81,7 @@ def m3u8MediaProcessor(url,urlWOVar,content):#链接处理
                 isEncrypto=True
                 break
     for i in range(len(list2)):#循环遍历
+        progressValue = round(i/len(list2),2)
         if list2[i].find('.ts')!=-1:#获取.ts文件的下载链接
             if list2[2].find('?')!=-1:#判断是否带参数
                 url2=list2[i][0:url.rindex('?')]#去除参数
@@ -100,11 +104,13 @@ def m3u8MediaProcessor(url,urlWOVar,content):#链接处理
             f3.close()
             f2.write(("file '"+os.getcwd()+"\\ts\\"+str(i)+".ts"+"'\r\n").encode())#写入file.txt
     f2.close()
+    progressValue = 1
     #合并TS文件
     mergeTs()
 
 # m3u8媒体文件处理（以文件形式下载）
 def m3u8MediaFileProcessor(content):
+    global progressValue
     list2 = content.split("\n")
     f2 = open('file.txt','wb')#file.txt用于辅助合并.ts文件
     isEncrypto = False
@@ -115,6 +121,7 @@ def m3u8MediaFileProcessor(content):
                 isEncrypto=True
                 break
     for i in range(len(list2)):#循环遍历
+        progressValue = round(i/len(list2),2)
         if list2[i].find('.ts')!=-1:#获取.ts文件的下载链接
             if list2[2].find('?')!=-1:#判断是否带参数
                 url2=list2[i][0:list2[i].rindex('?')]#去除参数
@@ -137,6 +144,7 @@ def m3u8MediaFileProcessor(content):
             f3.close()
             f2.write(("file '"+os.getcwd()+'\\ts\\'+str(i)+".ts"+"'\r\n").encode())#写入file.txt
     f2.close()
+    progressValue = 1
     #合并TS文件
     mergeTs()
 
@@ -218,16 +226,17 @@ def key_rvl(keyStr):
 #调用ffmpeg合并ts文件
 def mergeTs():
     main = "ffmpeg.exe -f concat -safe 0 -i file.txt -c copy out.mp4 -y"#ffmpeg合并命令
-    r_v = os.system(main)#调用ffmpeg合并.ts文件
-    printer.print('###ffmpeg result'+str(r_v),"i")
+    ctt = subprocess.getoutput(main)#调用ffmpeg合并.ts文件
+    printer.print(str(ctt),"i")
     printer.print('###done!',"i")
-    return r_v
 
 #启动线程下载，避免阻塞GUI
-def thread_download(protocol,host,url,downloadUrl,num):
+def thread_download(protocol,host,url,downloadUrl,num,root):
     try:
         _thread.start_new_thread( m3u8Playlist_download, (protocol,host,url,downloadUrl,num) )
-        messagebox.showinfo('提示','已经开始下载！')
+        root.destroy()
+        #messagebox.showinfo('提示','已经开始下载！')
+        GUI.progressBarGUI()
     except:
         printer.print("###Thread Error","e")
 

@@ -3,19 +3,20 @@ import os
 import m3u8dler
 import logger
 import time
+import tkinter.messagebox as messagebox
 
 option = ""
 
 def progressBarGUI():
     pgb = tk.Tk()
-    pgb.title("下载")
+    pgb.title("m3u8Downloader -https://github.com/Leenshady/m3u8Downloader")
     v = tk.StringVar(master=pgb)
     tk.Label(pgb, text='下载进度:', ).place(x=20, y=30)
     progress = tk.Label(pgb, textvariable=v)
     v.set('0%')
     progress.place(x=110, y=30)
-    v.set('1%')
-    pgb.update()
+    button = tk.Button(pgb,text="取消下载", command=lambda:stopDownload(pgb))
+    button.place(x=70,y=90)
     while(int(m3u8dler.progressValue)!=1):
         v.set(str(m3u8dler.progressValue*100)[0:5]+"%")
         pgb.update()
@@ -23,8 +24,15 @@ def progressBarGUI():
     v.set('下载完成！')
     pgb.mainloop()
 
+def stopDownload(pgb):
+    m3u8dler.isStop = True
+    messagebox.showinfo('提示','已取消下载')
+    pgb.destroy()
+    main()
+
 def masterPlaylistOptGUI(info,protocol,host,url,downloadUrl):
     root1 = tk.Tk()
+    root1.title("m3u8Downloader -https://github.com/Leenshady/m3u8Downloader")
     #这里是个巨坑，master参数一定要填上，不然radio不会绑定到Radiobutton上
     radio = tk.IntVar(master=root1)
     r = []
@@ -52,6 +60,7 @@ def selectU():
 
 def main():
     root = tk.Tk()
+    root.title("m3u8Downloader -https://github.com/Leenshady/m3u8Downloader")
     root.minsize(650, 150)
     root.maxsize(650, 150)  
     radio = tk.IntVar()

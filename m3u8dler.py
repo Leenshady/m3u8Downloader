@@ -16,6 +16,7 @@ headers = {'user-agent':'User-Agent:Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko
 global progressValue
 progressValue = 0.00
 global printer
+isStop = False
 
 #预处理参数
 def preProcess(varType, url, p, func):
@@ -40,7 +41,7 @@ def preProcess(varType, url, p, func):
                     if(res.text.find(".m3u8")!=-1):#主播放列表文件
                         m3u8PlaylistProcessor(url,urlWOVar,res.content,func)
                     elif(res.text.find(".ts")!=-1):#媒体播放列表
-                        m3u8MediaUrlProcessor(url,urlWOVar)
+                        thread_m3u8MediaUrlProcessor(url,urlWOVar)
                     else:
                         printer.print("fail:Link error","e")
                 else:
@@ -50,7 +51,7 @@ def preProcess(varType, url, p, func):
         if(content.find(".m3u8")!=-1):#主播放列表文件
             printer.print("The m3u8 master playlist is not supported at this time.","w")
         elif(content.find(".ts")!=-1):#媒体播放列表文件
-            m3u8MediaFileProcessor(content)
+            thread_m3u8MediaFileProcessor(content)
         else:
             printer.print("fail:Link error","e")
 
@@ -81,6 +82,8 @@ def m3u8MediaProcessor(url,urlWOVar,content):#链接处理
                 isEncrypto=True
                 break
     for i in range(len(list2)):#循环遍历
+        if(isStop==True):
+            exit()
         progressValue = round(i/len(list2),2)
         if list2[i].find('.ts')!=-1:#获取.ts文件的下载链接
             if list2[2].find('?')!=-1:#判断是否带参数
@@ -121,6 +124,8 @@ def m3u8MediaFileProcessor(content):
                 isEncrypto=True
                 break
     for i in range(len(list2)):#循环遍历
+        if(isStop==True):
+            exit()
         progressValue = round(i/len(list2),2)
         if list2[i].find('.ts')!=-1:#获取.ts文件的下载链接
             if list2[2].find('?')!=-1:#判断是否带参数
@@ -240,7 +245,18 @@ def thread_download(protocol,host,url,downloadUrl,num,root):
     except:
         printer.print("###Thread Error","e")
 
+def thread_m3u8MediaUrlProcessor(url,urlWOVar):
+    try:
+        _thread.start_new_thread(m3u8MediaUrlProcessor,(url,urlWOVar))
+        GUI.progressBarGUI()
+    except:
+        printer.print("###Thread Error","e")
 
-
+def thread_m3u8MediaFileProcessor(content):
+    try:
+        _thread.start_new_thread(m3u8MediaFileProcessor,(content))
+        GUI.progressBarGUI()
+    except:
+        printer.print("###Thread Error","e")
     
     

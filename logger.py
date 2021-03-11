@@ -3,6 +3,9 @@ import os
 import os.path
 from pathlib import Path
 import time
+import tkinter.messagebox as messagebox
+import GUI
+import tkinter as tk
 
 class Printer(object):
     #打印类
@@ -28,7 +31,8 @@ class LogPrinter(Printer):
         fh.setLevel(logging.DEBUG)  # 输出到file的log等级的开关
 
         # 第三步，定义handler的输出格式
-        formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
+        #formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
+        formatter = logging.Formatter("%(asctime)s - [line:%(lineno)d] - %(levelname)s: %(message)s")
         fh.setFormatter(formatter)
 
         # 第四步，将logger添加到handler里面
@@ -39,8 +43,16 @@ class LogPrinter(Printer):
         if(type=="i"):
             self.logger.info(msg)
         elif(type=="w"):
+            root = tk.Tk()
+            root.withdraw()
+            messagebox.showinfo('警告',msg)
+            root.destroy()
             self.logger.warning(msg)
         elif(type=="e"):
+            root = tk.Tk()
+            root.withdraw()
+            messagebox.showinfo('错误',msg)
+            root.destroy()
             self.logger.error(msg)
         elif(type=="d"):
             self.logger.debug(msg)

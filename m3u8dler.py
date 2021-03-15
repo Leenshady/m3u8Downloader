@@ -244,6 +244,7 @@ def thread_download(protocol,host,url,downloadUrl,num,root):
         GUI.progressBarGUI()
     except:
         printer.print("###Thread Error","e")
+        printer.print(traceback.format_exc(),"e")
 
 def thread_m3u8MediaUrlProcessor(url,urlWOVar):
     try:
@@ -251,12 +252,14 @@ def thread_m3u8MediaUrlProcessor(url,urlWOVar):
         GUI.progressBarGUI()
     except:
         printer.print("###Thread Error","e")
+        printer.print(traceback.format_exc(),"e")
 
 def thread_m3u8MediaFileProcessor(content):
     try:
-        _thread.start_new_thread(m3u8MediaFileProcessor,(content))
+        _thread.start_new_thread(m3u8MediaFileProcessor,(content,))
         GUI.progressBarGUI()
     except:
         printer.print("###Thread Error","e")
+        printer.print(traceback.format_exc(),"e")
     
     

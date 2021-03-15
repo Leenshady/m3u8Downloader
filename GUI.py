@@ -6,6 +6,7 @@ import time
 import tkinter.messagebox as messagebox
 
 option = ""
+progressBarGUIFlag = True
 
 def progressBarGUI():
     pgb = tk.Tk()
@@ -29,7 +30,8 @@ def progressBarGUI():
     progress.place(x=110, y=30)
     button = tk.Button(pgb,text="取消下载", command=lambda:stopDownload(pgb))
     button.place(x=70,y=90)
-    while(int(m3u8dler.progressValue)!=1):
+    global progressBarGUIFlag
+    while(int(m3u8dler.progressValue)!=1 and progressBarGUIFlag == True):
         v.set(str(m3u8dler.progressValue*100)[0:5]+"%")
         pgb.update()
         time.sleep(0.02)
@@ -39,6 +41,8 @@ def progressBarGUI():
 def stopDownload(pgb):
     m3u8dler.isStop = True
     messagebox.showinfo('提示','已取消下载')
+    global progressBarGUIFlag
+    progressBarGUIFlag = False
     pgb.destroy()
     main()
 
